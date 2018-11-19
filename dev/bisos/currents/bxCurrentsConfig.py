@@ -543,7 +543,7 @@ class pkgInfoParsSet(icm.Cmnd):
             processEachArg(each)
 
         if bxoId:
-            icm.FILE_ParamWriteToPath(
+             parNameFullPath = icm.FILE_ParamWriteToPath(
                 parNameFullPath=os.path.join(
                     configPkgInfoFpBaseDir_obtain(configBaseDir=configBaseDir),
                     "bxoId",
@@ -552,7 +552,7 @@ class pkgInfoParsSet(icm.Cmnd):
             )
 
         if sr:
-            icm.FILE_ParamWriteToPath(
+             parNameFullPath = icm.FILE_ParamWriteToPath(
                 parNameFullPath=os.path.join(configPkgInfoFpBaseDir_obtain(configBaseDir=configBaseDir),
                              "sr",
                 ),
@@ -560,7 +560,10 @@ class pkgInfoParsSet(icm.Cmnd):
             )
             
         if interactive:
-            icm.ANN_here("pkgInfoParsSet")
+            parValue = icm.FILE_ParamValueReadFromPath(parNameFullPath)
+            icm.ANN_here("pkgInfoParsSet: {parValue} at {parNameFullPath}".
+                         format(parValue=parValue, parNameFullPath=parNameFullPath))
+
 
         return cmndOutcome.set(
             opError=icm.OpError.Success,
