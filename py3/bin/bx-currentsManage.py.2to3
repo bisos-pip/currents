@@ -1,0 +1,27 @@
+RefactoringTool: Skipping optional fixer: buffer
+RefactoringTool: Skipping optional fixer: idioms
+RefactoringTool: Skipping optional fixer: set_literal
+RefactoringTool: Skipping optional fixer: ws_comma
+RefactoringTool: Refactored ./currents/py3/bin/bx-currentsManage.py
+RefactoringTool: Files that were modified:
+RefactoringTool: ./currents/py3/bin/bx-currentsManage.py
+--- ./currents/py3/bin/bx-currentsManage.py	(original)
++++ ./currents/py3/bin/bx-currentsManage.py	(refactored)
+@@ -165,7 +165,7 @@
+             argChoices.pop(0)
+             actions = argChoices
+         for each in actions:
+-            print each
++            print(each)
+             if interactive:
+                 #print( str( __doc__ ) )  # This is the Summary: from the top doc-string
+                 #version(interactive=True)
+@@ -328,7 +328,7 @@
+ 
+         configBaseDir = bxCurrentsThis.pkgBase_configDir()
+ 
+-        print configBaseDir
++        print(configBaseDir)
+ 
+         bxCurrentsConfig.examples_pkgInfoParsFull(
+             configBaseDir=configBaseDir,
