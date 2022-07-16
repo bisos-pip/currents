@@ -425,6 +425,71 @@ class usgCursParsDelete(icm.Cmnd):
 
         return cmndArgsSpecDict
 
+####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "usgCursParsGetK1" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin "0" :argsMax "9999" :asFunc "" :interactiveP ""
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc    [[elisp:(outline-show-subtree+toggle)][||]] /usgCursParsGetK1/ parsMand= parsOpt=configBaseDir argsMin=0 argsMax=9999 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+#+end_org """
+class usgCursParsGetK1(icm.Cmnd):
+    cmndParamsMandatory = [ ]
+    cmndParamsOptional = [ 'configBaseDir', ]
+    cmndArgsLen = {'Min': 0, 'Max': 9999,}
+
+    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmnd(self,
+        interactive=False,        # Can also be called non-interactively
+        configBaseDir=None,         # or Cmnd-Input
+        argsList=[],         # or Args-Input
+    ) -> icm.OpOutcome:
+        cmndOutcome = self.getOpOutcome()
+        if interactive:
+            if not self.cmndLineValidate(outcome=cmndOutcome):
+                return cmndOutcome
+            effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
+        else:
+            effectiveArgsList = argsList
+
+        callParamsDict = {'configBaseDir': configBaseDir, }
+        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
+            return cmndOutcome
+        configBaseDir = callParamsDict['configBaseDir']
+
+        cmndArgsSpecDict = self.cmndArgsSpec()
+        if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
+            return cmndOutcome
+####+END:
+        self.cmndDocStr(f""" #+begin_org
+** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  it reads from ../usgCurs/fp.
+        #+end_org """)
+
+        if not configBaseDir:
+            configBaseDir = configUsgCursFpBaseDir_obtain(None)
+
+        cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, effectiveArgsList)
+
+        if len(cmndArgs) == 0:
+            FP_readTreeAtBaseDir_CmndOutput(
+                interactive=interactive,
+                fpBaseDir=configBaseDir,
+                cmndOutcome=cmndOutcome,
+            )
+            print(f"{cmndOutcome.results}")
+            for eachFpName in cmndOutcome.results:
+                eachFpValue = cmndOutcome.results[eachFpName].parValueGet()
+                print(f"{eachFpName} {eachFpValue}")
+        else:
+            for each in cmndArgs:
+                parNameFullPath = os.path.join(
+                        configBaseDir,
+                        each
+                )
+                parValue = icm.FILE_ParamValueReadFromPath(parNameFullPath)
+
+                if interactive:
+                    #icm.ANN_here("usgCursParsGet: {parValue} at {parNameFullPath}".
+                    #     format(parValue=parValue, parNameFullPath=parNameFullPath))
+                    print(f"{each}={parValue}")
+
+        return cmndOutcome
 
 
 ####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "usgCursParsGet" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin "0" :argsMax "9999" :asFunc "" :interactiveP ""
@@ -468,24 +533,22 @@ class usgCursParsGet(icm.Cmnd):
 
         cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, effectiveArgsList)
 
+        FP_readTreeAtBaseDir_CmndOutput(
+            interactive=False,
+            fpBaseDir=configBaseDir,
+            cmndOutcome=cmndOutcome,
+        )
+
+        results = cmndOutcome.results
+
         if len(cmndArgs) == 0:
-            FP_readTreeAtBaseDir_CmndOutput(
-                interactive=interactive,
-                fpBaseDir=configBaseDir,
-                cmndOutcome=cmndOutcome,
-            )
+            for eachFpName in results:
+                eachFpValue = results[eachFpName].parValueGet()
+                print(f"{eachFpName} {eachFpValue}")
         else:
             for each in cmndArgs:
-                parNameFullPath = os.path.join(
-                        configBaseDir,
-                        each
-                )
-                parValue = icm.FILE_ParamValueReadFromPath(parNameFullPath)
-
-                if interactive:
-                    icm.ANN_here("usgCursParsGet: {parValue} at {parNameFullPath}".
-                         format(parValue=parValue, parNameFullPath=parNameFullPath))
-                    print(f"usgCursParsGet: {each}={parValue}")
+                eachFpValue = results[each].parValueGet()
+                print(f"{each} {eachFpValue}")
 
         return cmndOutcome
 
