@@ -82,8 +82,9 @@ import os
 import collections
 
 from bisos.currents import currentsConfig
-from bisos.currents import bxCurrentsThis
+from bisos.currents import currentsThis
 
+from bisos import bpf
 
 ####+BEGIN: b:python:cs:framework/importCmndsModules :cmndsModules ("blee.icmPlayer.bleep" "bisos.currents.bxCurrentsThis" "bisos.currents.currentsConfig")
 """ #+begin_org
@@ -92,7 +93,7 @@ from bisos.currents import bxCurrentsThis
 
 g_importedCmndsModules = [       # Enumerate modules from which CMNDs become invokable
     'blee.icmPlayer.bleep',
-    'bisos.currents.bxCurrentsThis',
+    'bisos.currents.currentsThis',
     'bisos.currents.currentsConfig',
 ]
 
@@ -112,17 +113,6 @@ def g_paramsExtraSpecify(
 
     G = icm.IcmGlobalContext()
     icmParams = icm.ICM_ParamDict()
-
-    icmParams.parDictAdd(
-        parName='moduleVersion',
-        parDescription='Module Version',
-        parDataType=None,
-        parDefault=None,
-        parChoices=list(),
-        parScope=icm.ICM_ParamScope.TargetParam,
-        argparseShortOpt=None,
-        argparseLongOpt='--version',
-    )
 
     bleep.commonParamsSpecify(icmParams)
 
@@ -175,21 +165,21 @@ class examples(icm.Cmnd):
 """
 ####+END:
 
-        #
+
         # ICMs PKG Information
         #
+        # configBaseDir = currentsThis.pkgBase_configDir()
 
-        configBaseDir = bxCurrentsThis.pkgBase_configDir()
+        configBaseDir = currentsConfig.configUsgCursFpBaseDir_obtain(None)
+        #print(configBaseDir)
 
-        print(configBaseDir)
-
-        currentsConfig.examples_pkgInfoParsFull(
+        currentsConfig.examples_usgCursParsFull(
             configBaseDir=configBaseDir,
         )
 
-
         #def execLineEx(cmndStr): icm.ex_gExecMenuItem(execLine=cmndStr)
         #execLineEx("""ls""")
+
 
         return(cmndOutcome)
 
