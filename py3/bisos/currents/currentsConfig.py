@@ -83,6 +83,8 @@ import shutil
 
 from bisos import bpf
 
+import sys
+
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 1 :title "Obtain Package Bases"  :extraInfo ""
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*       [[elisp:(outline-show-subtree+toggle)][| *Obtain Package Bases:* |]]    [[elisp:(org-shifttab)][<)]] E|
@@ -155,7 +157,7 @@ def bxoId_fpObtain(
         configBaseDir = configBaseDir_obtain()
 
     return(
-        icm.FILE_ParamValueReadFrom(
+        bpf.fp.FILE_ParamValueReadFrom(
             parRoot= os.path.abspath("{}/usgCurs/fp".format(configBaseDir)),
             parName="bxoId")
     )
@@ -173,7 +175,7 @@ def sr_fpObtain(
         configBaseDir = configBaseDir_obtain()
 
     return(
-        icm.FILE_ParamValueReadFrom(
+        bpf.fp.FILE_ParamValueReadFrom(
             parRoot= os.path.abspath("{}/usgCurs/fp".format(configBaseDir)),
             parName="sr")
     )
@@ -425,11 +427,86 @@ class usgCursParsDelete(icm.Cmnd):
 
         return cmndArgsSpecDict
 
-####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "usgCursParsGetK1" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin "0" :argsMax "9999" :asFunc "" :interactiveP ""
+
+####+BEGIN: bx:icm:py3:func :funcName "curParsGetAsDictValue_wOp" :funcType "WOp" :retType "extTyped" :deco "icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)" :argsList ""
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc    [[elisp:(outline-show-subtree+toggle)][||]] /usgCursParsGetK1/ parsMand= parsOpt=configBaseDir argsMin=0 argsMax=9999 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-WOp   [[elisp:(outline-show-subtree+toggle)][||]] /curParsGetAsDictValue_wOp/ deco=icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)  [[elisp:(org-cycle)][| ]]
 #+end_org """
-class usgCursParsGetK1(icm.Cmnd):
+@icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+def curParsGetAsDictValue_wOp(
+####+END:
+        parNamesList: list,
+        outcome: bpf.op.Outcome = None,
+) -> bpf.op.Outcome:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ] A Wrapped Operation with results being a dictionary of values.
+    if not ~parNamesList~, get all the values.
+*** TODO --- NOTYET This needs to be moved to
+    #+end_org """
+
+    configBaseDir = configUsgCursFpBaseDir_obtain(None)
+
+    return (
+        FP_parsGetAsDictValue_wOp(parNamesList, configBaseDir, outcome)
+    )
+
+####+BEGIN: bx:icm:py3:func :funcName "FP_parsGetAsDictValue_wOp" :funcType "wOp" :retType "OpOutcome" :deco "icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)" :argsList ""
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-WOp   [[elisp:(outline-show-subtree+toggle)][||]] /FP_parsGetAsDictValue_wOp/ deco=icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)  [[elisp:(org-cycle)][| ]]
+#+end_org """
+@icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+def FP_parsGetAsDictValue_wOp(
+####+END:
+        parNamesList: list,
+        configBaseDir,
+        outcome: bpf.op.Outcome = None,
+) -> bpf.op.Outcome:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ] A Wrapped Operation with results being a dictionary of values.
+    if not ~parNamesList~, get all the values.
+*** TODO --- NOTYET This needs to be moved to
+    #+end_org """
+
+
+    return bpf.fp.parsGetAsDictValue_wOp(parNamesList, configBaseDir, outcome=outcome)
+
+    if not outcome:
+        outcome = bpf.op.Outcome()
+
+    FP_readTreeAtBaseDir_CmndOutput(
+        interactive=False,
+        fpBaseDir=configBaseDir,
+        cmndOutcome=outcome,
+    )
+
+    results = outcome.results
+
+    opResults = dict()
+    opErrors = ""
+
+    if parNamesList:
+        for each in parNamesList:
+            # NOTYET, If no results[each], we need to record it in opErrors
+            opResults[each] = results[each].parValueGet()
+            #print(f"{each} {eachFpValue}")
+
+    else:
+        for eachFpName in results:
+            opResults[eachFpName] = results[eachFpName].parValueGet()
+            #print(f"{eachFpName} {eachFpValue}")
+
+    return outcome.set(
+        opError=icm.OpError.Success,
+        opResults=opResults,
+    )
+
+
+
+####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "usgCursParsGetK2" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin "0" :argsMax "9999" :asFunc "" :interactiveP ""
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc    [[elisp:(outline-show-subtree+toggle)][||]] /usgCursParsGetK2/ parsMand= parsOpt=configBaseDir argsMin=0 argsMax=9999 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+#+end_org """
+class usgCursParsGetK2(icm.Cmnd):
     cmndParamsMandatory = [ ]
     cmndParamsOptional = [ 'configBaseDir', ]
     cmndArgsLen = {'Min': 0, 'Max': 9999,}
@@ -466,30 +543,27 @@ class usgCursParsGetK1(icm.Cmnd):
 
         cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, effectiveArgsList)
 
+        # FP_readTreeAtBaseDir_CmndOutput(
+        #     interactive=False,
+        #     fpBaseDir=configBaseDir,
+        #     cmndOutcome=cmndOutcome,
+        # )
+
+        bpf.fp.readTreeAtBaseDir_wOp(configBaseDir, cmndOutcome=cmndOutcome)
+
+        results = cmndOutcome.results
+
         if len(cmndArgs) == 0:
-            FP_readTreeAtBaseDir_CmndOutput(
-                interactive=interactive,
-                fpBaseDir=configBaseDir,
-                cmndOutcome=cmndOutcome,
-            )
-            print(f"{cmndOutcome.results}")
-            for eachFpName in cmndOutcome.results:
-                eachFpValue = cmndOutcome.results[eachFpName].parValueGet()
+            for eachFpName in results:
+                eachFpValue = results[eachFpName].parValueGet()
                 print(f"{eachFpName} {eachFpValue}")
         else:
             for each in cmndArgs:
-                parNameFullPath = os.path.join(
-                        configBaseDir,
-                        each
-                )
-                parValue = icm.FILE_ParamValueReadFromPath(parNameFullPath)
-
-                if interactive:
-                    #icm.ANN_here("usgCursParsGet: {parValue} at {parNameFullPath}".
-                    #     format(parValue=parValue, parNameFullPath=parNameFullPath))
-                    print(f"{each}={parValue}")
+                eachFpValue = results[each].parValueGet()
+                print(f"{each} {eachFpValue}")
 
         return cmndOutcome
+
 
 
 ####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "usgCursParsGet" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin "0" :argsMax "9999" :asFunc "" :interactiveP ""
@@ -533,22 +607,13 @@ class usgCursParsGet(icm.Cmnd):
 
         cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, effectiveArgsList)
 
-        FP_readTreeAtBaseDir_CmndOutput(
-            interactive=False,
-            fpBaseDir=configBaseDir,
-            cmndOutcome=cmndOutcome,
-        )
+        curParsGetAsDictValue_wOp(cmndArgs, cmndOutcome)
 
         results = cmndOutcome.results
 
-        if len(cmndArgs) == 0:
-            for eachFpName in results:
-                eachFpValue = results[eachFpName].parValueGet()
-                print(f"{eachFpName} {eachFpValue}")
-        else:
-            for each in cmndArgs:
-                eachFpValue = results[each].parValueGet()
-                print(f"{each} {eachFpValue}")
+        if interactive:
+            for eachKey in results:
+                print(f"{eachKey}: {results[eachKey]}")
 
         return cmndOutcome
 
@@ -635,12 +700,11 @@ class usgCursParsSet(icm.Cmnd):
                 if not os.path.isdir(valuePath):
                     raise
 
-            icm.FILE_ParamWriteToPath(
+            bpf.fp.FILE_ParamWriteToPath(
                 parNameFullPath=fpPath,
                 parValue=valuePath,
             )
             parNameFullPath = fpPath
-
 
         # Any number of Name=Value can be passed as args
         for each in cmndArgs:
@@ -649,7 +713,7 @@ class usgCursParsSet(icm.Cmnd):
                     configUsgCursFpBaseDir_obtain(configBaseDir=configBaseDir),
                     varNameValue[0],
             )
-            icm.FILE_ParamWriteToPath(
+            bpf.fp.FILE_ParamWriteToPath(
                 parNameFullPath=parNameFullPath,
 
                 parValue=varNameValue[1],
@@ -657,7 +721,7 @@ class usgCursParsSet(icm.Cmnd):
 
 
         if bxoId:
-             parNameFullPath = icm.FILE_ParamWriteToPath(
+             parNameFullPath = bpf.fp.FILE_ParamWriteToPath(
                 parNameFullPath=os.path.join(
                     configUsgCursFpBaseDir_obtain(configBaseDir=configBaseDir),
                     "bxoId",
@@ -666,7 +730,7 @@ class usgCursParsSet(icm.Cmnd):
             )
 
         if sr:
-             parNameFullPath = icm.FILE_ParamWriteToPath(
+             parNameFullPath = bpf.fp.FILE_ParamWriteToPath(
                 parNameFullPath=os.path.join(configUsgCursFpBaseDir_obtain(configBaseDir=configBaseDir),
                              "sr",
                 ),
@@ -674,7 +738,7 @@ class usgCursParsSet(icm.Cmnd):
             )
 
         if interactive:
-            parValue = icm.FILE_ParamValueReadFromPath(parNameFullPath)
+            parValue = bpf.fp.FILE_ParamValueReadFromPath(parNameFullPath)
             icm.ANN_here("usgCursParsSet: {parValue} at {parNameFullPath}".
                          format(parValue=parValue, parNameFullPath=parNameFullPath))
 
@@ -704,6 +768,9 @@ class usgCursParsSet(icm.Cmnd):
         )
 
         return cmndArgsSpecDict
+
+
+
 
 ####+BEGIN: b:prog:file/endOfFile :extraParams nil
 """ #+begin_org
