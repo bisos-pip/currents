@@ -1,22 +1,34 @@
 # -*- coding: utf-8 -*-
 
 """ #+begin_org
-* *[Summary]* :: A =CmndLib= for providing currents.
+* *[Summary]* :: A =CmndLib= for providing currents configuration to CS-s.
 #+end_org """
+
+####+BEGIN: b:py3:cs:file/dblockControls :classification "cs-u"
+""" #+begin_org
+* [[elisp:(org-cycle)][| /Control Parameters Of This File/ |]] :: dblk ctrls classifications=cs-u
+#+BEGIN_SRC emacs-lisp
+(setq-local b:dblockControls t) ; (setq-local b:dblockControls nil)
+(put 'b:dblockControls 'py3:cs:Classification "cs-u") ; one of cs-mu, cs-u, cs-lib, bpf-lib, pyLibPure
+#+END_SRC
+#+RESULTS:
+: cs-u
+#+end_org """
+####+END:
 
 ####+BEGIN: b:prog:file/proclamations :outLevel 1
 """ #+begin_org
-* *[[elisp:(org-cycle)][| Proclamations |]]* :: Libre-Halaal Software --- Part Of Blee ---  Poly-COMEEGA Format.
-** This is Libre-Halaal Software. © Libre-Halaal Foundation. Subject to AGPL.
-** It is not part of Emacs. It is part of Blee.
-** Best read and edited  with Poly-COMEEGA (Polymode Colaborative Org-Mode Enhance Emacs Generalized Authorship)
+* *[[elisp:(org-cycle)][| Proclamations |]]* :: Libre-Halaal Software --- Part Of BISOS ---  Poly-COMEEGA Format.
+** This is Libre-Halaal Software. © Neda Communications, Inc. Subject to AGPL.
+** It is part of BISOS (ByStar Internet Services OS)
+** Best read and edited  with Blee in Poly-COMEEGA (Polymode Colaborative Org-Mode Enhance Emacs Generalized Authorship)
 #+end_org """
 ####+END:
 
 ####+BEGIN: b:prog:file/particulars :authors ("./inserts/authors-mb.org")
 """ #+begin_org
 * *[[elisp:(org-cycle)][| Particulars |]]* :: Authors, version
-** This File: NOTYET
+** This File: /bisos/git/auth/bxRepos/bisos-pip/currents/py3/bisos/currents/currentsConfig.py
 ** Authors: Mohsen BANAN, http://mohsen.banan.1.byname.net/contact
 #+end_org """
 ####+END:
@@ -26,12 +38,12 @@
 * *[[elisp:(org-cycle)][| Particulars-csInfo |]]*
 #+end_org """
 import typing
-icmInfo: typing.Dict[str, typing.Any] = { 'moduleName': ['currentsConfig'], }
-icmInfo['version'] = '202207114151'
-icmInfo['status']  = 'inUse'
-icmInfo['panel'] = 'currentsConfig-Panel.org'
-icmInfo['groupingType'] = 'IcmGroupingType-pkged'
-icmInfo['cmndParts'] = 'IcmCmndParts[common] IcmCmndParts[param]'
+csInfo: typing.Dict[str, typing.Any] = { 'moduleName': ['currentsConfig'], }
+csInfo['version'] = '202209290819'
+csInfo['status']  = 'inUse'
+csInfo['panel'] = 'currentsConfig-Panel.org'
+csInfo['groupingType'] = 'IcmGroupingType-pkged'
+csInfo['cmndParts'] = 'IcmCmndParts[common] IcmCmndParts[param]'
 ####+END:
 
 """ #+begin_org
@@ -56,23 +68,21 @@ Module description comes here.
 #+end_org """
 ####+END:
 
-####+BEGIN: bx:icm:python:icmItem :itemType "=PyImports= " :itemTitle "*Py Library IMPORTS*"
+####+BEGIN: b:py3:cs:orgItem/basic :type "=PyImports= " :title "*Py Library IMPORTS*" :comment "-- with classification based framework/imports"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  =PyImports=  [[elisp:(outline-show-subtree+toggle)][||]] *Py Library IMPORTS*  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  =PyImports=  [[elisp:(outline-show-subtree+toggle)][||]] *Py Library IMPORTS* -- with classification based framework/imports  [[elisp:(org-cycle)][| ]]
 #+end_org """
 ####+END:
 
-####+BEGIN: bx:dblock:global:file-insert-cond :cond "./blee.el" :file "/bisos/apps/defaults/update/sw/icm/py/importUcfIcmBleepG.py"
-from unisos import ucf
-from unisos import icm
+####+BEGIN: b:py3:cs:framework/imports :basedOn "classification"
+""" #+begin_org
+** Imports Based On Classification=cs-u
+#+end_org """
+from bisos import b
+from bisos.b import cs
+from bisos.b import b_io
 
-icm.unusedSuppressForEval(ucf.__file__)  # in case icm and ucf are not used
-
-G = icm.IcmGlobalContext()
-# G.icmLibsAppend = __file__
-# G.icmCmndsLibsAppend = __file__
-
-from blee.icmPlayer import bleep
+import collections
 ####+END:
 
 import os
@@ -80,8 +90,6 @@ import collections
 #import enum
 
 import shutil
-
-from bisos import bpf
 
 import sys
 
@@ -91,26 +99,33 @@ import sys
 #+end_org """
 ####+END:
 
-####+BEGIN: bx:icm:python:func :funcName "configBaseDir_obtain" :funcType "anyOrNone" :retType "bool" :deco "" :argsList ""
+####+BEGIN: b:py3:cs:func/typing :funcName "configBaseDir_obtain" :deco "track"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /configBaseDir_obtain/ retType=bool argsList=nil  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-       [[elisp:(outline-show-subtree+toggle)][||]] /configBaseDir_obtain/  deco=track  [[elisp:(org-cycle)][| ]]
 #+end_org """
-def configBaseDir_obtain():
+@cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+def configBaseDir_obtain(
 ####+END:
 
-    outcome =  bpf.subProc.WOpW(invedBy=None, log=0).bash(
+) -> str:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ]
+    #+end_org """
+
+
+    outcome =  b.subProc.WOpW(invedBy=None, log=0).bash(
         f"""usgBpos.sh -i usgBpos_usageEnvs_fullUse_bxoPath""")
 
     if outcome.isProblematic():
-        icm.EH_badOutcome(outcome)
-        return None
+        b_io.eh.badOutcome(outcome)
+        return ""
 
     retVal = outcome.stdout.rstrip('\n')
 
     return retVal
 
 
-####+BEGIN: bx:icm:python:func :funcName "configUsgCursBaseDir_obtain" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "configBaseDir"
+####+BEGIN: bx:cs:python:func :funcName "configUsgCursBaseDir_obtain" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "configBaseDir"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /configUsgCursBaseDir_obtain/ retType=bool argsList=(configBaseDir)  [[elisp:(org-cycle)][| ]]
 #+end_org """
@@ -124,7 +139,7 @@ def configUsgCursBaseDir_obtain(
     return os.path.abspath(os.path.join(configBaseDir, "control/currents"))
 
 
-####+BEGIN: bx:icm:python:func :funcName "configUsgCursFpBaseDir_obtain" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "configBaseDir"
+####+BEGIN: bx:cs:python:func :funcName "configUsgCursFpBaseDir_obtain" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "configBaseDir"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /configUsgCursFpBaseDir_obtain/ retType=bool argsList=(configBaseDir)  [[elisp:(org-cycle)][| ]]
 #+end_org """
@@ -145,7 +160,7 @@ def configUsgCursFpBaseDir_obtain(
 #+end_org """
 ####+END:
 
-####+BEGIN: bx:icm:python:func :funcName "bxoId_fpObtain" :comment "Configuration Parameter" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "configBaseDir"
+####+BEGIN: bx:cs:python:func :funcName "bxoId_fpObtain" :comment "Configuration Parameter" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "configBaseDir"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /bxoId_fpObtain/ =Configuration Parameter= retType=bool argsList=(configBaseDir)  [[elisp:(org-cycle)][| ]]
 #+end_org """
@@ -157,13 +172,13 @@ def bxoId_fpObtain(
         configBaseDir = configBaseDir_obtain()
 
     return(
-        bpf.fp.FILE_ParamValueReadFrom(
+        b.fp.FileParamValueReadFrom(
             parRoot= os.path.abspath("{}/usgCurs/fp".format(configBaseDir)),
             parName="bxoId")
     )
 
 
-####+BEGIN: bx:icm:python:func :funcName "sr_fpObtain" :comment "Configuration Parameter" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "configBaseDir"
+####+BEGIN: bx:cs:python:func :funcName "sr_fpObtain" :comment "Configuration Parameter" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "configBaseDir"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /sr_fpObtain/ =Configuration Parameter= retType=bool argsList=(configBaseDir)  [[elisp:(org-cycle)][| ]]
 #+end_org """
@@ -175,7 +190,7 @@ def sr_fpObtain(
         configBaseDir = configBaseDir_obtain()
 
     return(
-        bpf.fp.FILE_ParamValueReadFrom(
+        b.fp.FileParamValueReadFrom(
             parRoot= os.path.abspath("{}/usgCurs/fp".format(configBaseDir)),
             parName="sr")
     )
@@ -188,44 +203,44 @@ def sr_fpObtain(
 ####+END:
 
 
-####+BEGIN: bx:icm:python:func :funcName "commonParamsSpecify" :funcType "void" :retType "bool" :deco "" :argsList "icmParams"
+####+BEGIN: bx:cs:python:func :funcName "commonParamsSpecify" :funcType "void" :retType "bool" :deco "" :argsList "csParams"
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-void     [[elisp:(outline-show-subtree+toggle)][||]] /commonParamsSpecify/ retType=bool argsList=(icmParams)  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-void     [[elisp:(outline-show-subtree+toggle)][||]] /commonParamsSpecify/ retType=bool argsList=(csParams)  [[elisp:(org-cycle)][| ]]
 #+end_org """
 def commonParamsSpecify(
-    icmParams,
+    csParams,
 ):
 ####+END:
 
-    icmParams.parDictAdd(
+    csParams.parDictAdd(
         parName='configBaseDir',
         parDescription="Root Of usgCurs/fp from which file parameters will be read",
         parDataType=None,
         parDefault=None,
         parChoices=["any"],
-        parScope=icm.ICM_ParamScope.TargetParam,
+        # parScope=cs.CmndParamScope.TargetParam,
         argparseShortOpt=None,
         argparseLongOpt='--configBaseDir',
     )
 
-    icmParams.parDictAdd(
+    csParams.parDictAdd(
         parName='bxoId',
         parDescription="BISOS Default UserName",
         parDataType=None,
         parDefault=None,
         parChoices=["any"],
-        parScope=icm.ICM_ParamScope.TargetParam,
+        # parScope=cs.CmndParamScope.TargetParam,
         argparseShortOpt=None,
         argparseLongOpt='--bxoId',
     )
 
-    icmParams.parDictAdd(
+    csParams.parDictAdd(
         parName='sr',
         parDescription="BISOS Default GroupName",
         parDataType=None,
         parDefault=None,
         parChoices=["any"],
-        parScope=icm.ICM_ParamScope.TargetParam,
+        # parScope=cs.CmndParamScope.TargetParam,
         argparseShortOpt=None,
         argparseLongOpt='--sr',
     )
@@ -237,7 +252,7 @@ def commonParamsSpecify(
 ####+END:
 
 
-####+BEGIN: bx:icm:python:func :funcName "examples_usgCursParsFull" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "configBaseDir"
+####+BEGIN: bx:cs:python:func :funcName "examples_usgCursParsFull" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "configBaseDir"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /examples_usgCursParsFull/ retType=bool argsList=(configBaseDir)  [[elisp:(org-cycle)][| ]]
 #+end_org """
@@ -250,32 +265,32 @@ def examples_usgCursParsFull(
 """
 
     def cpsInit(): return collections.OrderedDict()
-    def menuItem(verbosity): icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity=verbosity,
+    def menuItem(verbosity): cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity=verbosity,
                              comment='none', icmWrapper=None, icmName=None) # verbosity: 'little' 'basic' 'none'
-    def execLineEx(cmndStr): icm.ex_gExecMenuItem(execLine=cmndStr)
+    def execLineEx(cmndStr): cs.examples.execInsert(execLine=cmndStr)
 
-    icm.cmndExampleMenuChapter(' =FP Values=  *usgCurs Clear InfoBase --- Deletes All FPs*')
+    cs.examples.menuChapter(' =FP Values=  *usgCurs Clear InfoBase --- Deletes All FPs*')
 
     cmndName = "usgCursParsDelete" ; cmndArgs = "" ;
     cps = collections.OrderedDict() ;  cps['configBaseDir'] = configBaseDir
-    icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity='little')
+    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
 
     cmndName = "usgCursParsDelete" ; cmndArgs = "" ; cps=cpsInit(); menuItem(verbosity='none')
 
     cmndName = "usgCursParsDelete" ; cmndArgs = "anyName" ;
     cps = collections.OrderedDict() ;
-    icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, icmWrapper="echo", verbosity='little')
+    cs.examples.cmndInsert(cmndName, cps, cmndArgs, icmWrapper="echo", verbosity='little')
 
 
-    icm.cmndExampleMenuChapter(' =FP Values=  *usgCurs Get Parameters*')
+    cs.examples.menuChapter(' =FP Values=  *usgCurs Get Parameters*')
 
     cmndName = "usgCursParsGet" ; cmndArgs = "" ;
     cps = collections.OrderedDict() ;  cps['configBaseDir'] = configBaseDir
-    icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity='little')
+    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
 
     cmndName = "usgCursParsGet" ; cmndArgs = "" ; cps=cpsInit(); menuItem(verbosity='none')
 
-    icm.cmndExampleMenuChapter(' =FP Values=  *UsgCurs Defaults ParsSet  --*')
+    cs.examples.menuChapter(' =FP Values=  *UsgCurs Defaults ParsSet  --*')
 
     cmndName = "usgCursParsDefaultsSet" ; cmndArgs = "bxoPolicy /" ;
     cpsInit(); menuItem('none')
@@ -283,35 +298,35 @@ def examples_usgCursParsFull(
     cmndName = "usgCursParsDefaultsSet" ; cmndArgs = "bxoPolicy /tmp" ;
     cpsInit(); menuItem('none')
 
-    icm.cmndExampleMenuChapter(' =FP Values=  *UsgCurs ParsSet -- Set Parameters Explicitly*')
+    cs.examples.menuChapter(' =FP Values=  *UsgCurs ParsSet -- Set Parameters Explicitly*')
 
     cmndName = "usgCursParsSet" ; cmndArgs = "" ;
     cps = collections.OrderedDict() ;  cps['bxoId'] = "mcm"
-    icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity='little')
+    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
 
     cmndName = "usgCursParsSet" ; cmndArgs = "" ;
     cps = collections.OrderedDict() ;  cps['bxoId'] = "ea-59043"
-    icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity='little')
+    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
 
     cmndName = "usgCursParsSet" ; cmndArgs = "" ;
     cps = collections.OrderedDict() ;  cps['sr'] = "marme/dsnProc"
-    icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity='little')
+    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
 
     cmndName = "usgCursParsSet" ; cmndArgs = "" ;
     cps = collections.OrderedDict() ;  cps['sr'] = "apache2/plone3"
-    icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity='little')
+    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
 
     # cmndName = "usgCursParsSet" ; cmndArgs = "" ;
     # cps = collections.OrderedDict() ;  cps['configBaseDir'] = configBaseDir ; cps['platformControlBaseDir'] = "${HOME}/bisosControl"
-    # icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity='little')
+    # cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
 
     cmndName = "usgCursParsSet" ; cmndArgs = "anyName=anyValue" ;
     cps = collections.OrderedDict() ;
-    icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, verbosity='little')
+    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
 
     cmndName = "usgCursParsSet" ; cmndArgs = "anyName=anyValue" ;
     cps = collections.OrderedDict() ;
-    icm.ex_gCmndMenuItem(cmndName, cps, cmndArgs, icmWrapper="echo", verbosity='little')
+    cs.examples.cmndInsert(cmndName, cps, cmndArgs, icmWrapper="echo", verbosity='little')
 
 
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 1 :title "File Parameters Get/Set -- Commands"
@@ -321,7 +336,7 @@ def examples_usgCursParsFull(
 ####+END:
 
 
-####+BEGIN: bx:icm:python:func :funcName "FP_readTreeAtBaseDir_CmndOutput" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "interactive fpBaseDir cmndOutcome"
+####+BEGIN: bx:cs:python:func :funcName "FP_readTreeAtBaseDir_CmndOutput" :funcType "anyOrNone" :retType "bool" :deco "" :argsList "interactive fpBaseDir cmndOutcome"
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /FP_readTreeAtBaseDir_CmndOutput/ retType=bool argsList=(interactive fpBaseDir cmndOutcome)  [[elisp:(org-cycle)][| ]]
 #+end_org """
@@ -344,37 +359,27 @@ def FP_readTreeAtBaseDir_CmndOutput(
         FPsDir=fpBaseDir,
     )
 
-####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "usgCursParsDelete" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin "0" :argsMax "9999" :asFunc "" :interactiveP ""
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "usgCursParsDelete" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin 0 :argsMax 9999 :pyInv ""
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc    [[elisp:(outline-show-subtree+toggle)][||]] /usgCursParsDelete/ parsMand= parsOpt=configBaseDir argsMin=0 argsMax=9999 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<usgCursParsDelete>>  =verify= parsOpt=configBaseDir argsMax=9999 ro=cli   [[elisp:(org-cycle)][| ]]
 #+end_org """
-class usgCursParsDelete(icm.Cmnd):
+class usgCursParsDelete(cs.Cmnd):
     cmndParamsMandatory = [ ]
     cmndParamsOptional = [ 'configBaseDir', ]
     cmndArgsLen = {'Min': 0, 'Max': 9999,}
 
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
     def cmnd(self,
-        interactive=False,        # Can also be called non-interactively
-        configBaseDir=None,         # or Cmnd-Input
-        argsList=[],         # or Args-Input
-    ) -> icm.OpOutcome:
-        cmndOutcome = self.getOpOutcome()
-        if interactive:
-            if not self.cmndLineValidate(outcome=cmndOutcome):
-                return cmndOutcome
-            effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
-        else:
-            effectiveArgsList = argsList
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             configBaseDir: typing.Optional[str]=None,  # Cs Optional Param
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+    ) -> b.op.Outcome:
 
         callParamsDict = {'configBaseDir': configBaseDir, }
-        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
-            return cmndOutcome
-        configBaseDir = callParamsDict['configBaseDir']
-
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return b_io.eh.badOutcome(cmndOutcome)
         cmndArgsSpecDict = self.cmndArgsSpec()
-        if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
-            return cmndOutcome
 ####+END:
         self.cmndDocStr(f""" #+begin_org
 ** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  Remove The entire infoBaseDir
@@ -383,14 +388,14 @@ class usgCursParsDelete(icm.Cmnd):
         if not configBaseDir:
             configBaseDir = configUsgCursFpBaseDir_obtain(None)
 
-        cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, effectiveArgsList)
+        cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, argsList)
 
         if len(cmndArgs) == 0:
             try:
                 shutil.rmtree(configBaseDir)
             except OSError as e:
                 print(f"Error: {configBaseDir} : {e.strerror}")
-            bpf.dir.createIfNotThere(configBaseDir)
+            b.dir.createIfNotThere(configBaseDir)
 
         else:
             for each in cmndArgs:
@@ -406,17 +411,17 @@ class usgCursParsDelete(icm.Cmnd):
 
         return cmndOutcome
 
-####+BEGIN: bx:icm:python:method :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
-    """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-anyOrNone :: /cmndArgsSpec/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
-#+end_org """
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def cmndArgsSpec(self):
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
 ####+END:
         """
 ***** Cmnd Args Specification
 """
-        cmndArgsSpecDict = icm.CmndArgsSpecDict()
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
         cmndArgsSpecDict.argsDictAdd(
             argPosition="0&-1",
             argName="cmndArgs",
@@ -428,16 +433,15 @@ class usgCursParsDelete(icm.Cmnd):
         return cmndArgsSpecDict
 
 
-####+BEGIN: bx:icm:py3:func :funcName "curParsGetAsDictValue_wOp" :funcType "WOp" :retType "extTyped" :deco "icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)" :argsList ""
+####+BEGIN: b:py3:cs:func/typing :funcName "curParsGetAsDictValue_wOp" :funcType "WOp" :retType "extTyped" :deco "" :argsList ""
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-WOp   [[elisp:(outline-show-subtree+toggle)][||]] /curParsGetAsDictValue_wOp/ deco=icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-WOp    [[elisp:(outline-show-subtree+toggle)][||]] /curParsGetAsDictValue_wOp/   [[elisp:(org-cycle)][| ]]
 #+end_org """
-@icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
 def curParsGetAsDictValue_wOp(
 ####+END:
         parNamesList: list,
-        outcome: bpf.op.Outcome = None,
-) -> bpf.op.Outcome:
+        outcome: b.op.Outcome = None,
+) -> b.op.Outcome:
     """ #+begin_org
 ** [[elisp:(org-cycle)][| *DocStr | ] A Wrapped Operation with results being a dictionary of values.
     if not ~parNamesList~, get all the values.
@@ -450,17 +454,16 @@ def curParsGetAsDictValue_wOp(
         FP_parsGetAsDictValue_wOp(parNamesList, configBaseDir, outcome)
     )
 
-####+BEGIN: bx:icm:py3:func :funcName "FP_parsGetAsDictValue_wOp" :funcType "wOp" :retType "OpOutcome" :deco "icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)" :argsList ""
+####+BEGIN: b:py3:cs:func/typing :funcName "FP_parsGetAsDictValue_wOp" :funcType "wOp" :retType "OpOutcome" :deco "" :argsList ""
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Func-WOp   [[elisp:(outline-show-subtree+toggle)][||]] /FP_parsGetAsDictValue_wOp/ deco=icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-wOp    [[elisp:(outline-show-subtree+toggle)][||]] /FP_parsGetAsDictValue_wOp/   [[elisp:(org-cycle)][| ]]
 #+end_org """
-@icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
 def FP_parsGetAsDictValue_wOp(
 ####+END:
         parNamesList: list,
         configBaseDir,
-        outcome: bpf.op.Outcome = None,
-) -> bpf.op.Outcome:
+        outcome: b.op.Outcome = None,
+) -> b.op.Outcome:
     """ #+begin_org
 ** [[elisp:(org-cycle)][| *DocStr | ] A Wrapped Operation with results being a dictionary of values.
     if not ~parNamesList~, get all the values.
@@ -468,10 +471,10 @@ def FP_parsGetAsDictValue_wOp(
     #+end_org """
 
 
-    return bpf.fp.parsGetAsDictValue_wOp(parNamesList, configBaseDir, outcome=outcome)
+    return b.fp.parsGetAsDictValue_wOp(parNamesList, configBaseDir, outcome=outcome)
 
     if not outcome:
-        outcome = bpf.op.Outcome()
+        outcome = b.op.Outcome()
 
     FP_readTreeAtBaseDir_CmndOutput(
         interactive=False,
@@ -496,43 +499,33 @@ def FP_parsGetAsDictValue_wOp(
             #print(f"{eachFpName} {eachFpValue}")
 
     return outcome.set(
-        opError=icm.OpError.Success,
+        opError=b.OpError.Success,
         opResults=opResults,
     )
 
 
 
-####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "usgCursParsGetK2" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin "0" :argsMax "9999" :asFunc "" :interactiveP ""
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "usgCursParsGetK2" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin 0 :argsMax 9999 :pyInv ""
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc    [[elisp:(outline-show-subtree+toggle)][||]] /usgCursParsGetK2/ parsMand= parsOpt=configBaseDir argsMin=0 argsMax=9999 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<usgCursParsGetK2>>  =verify= parsOpt=configBaseDir argsMax=9999 ro=cli   [[elisp:(org-cycle)][| ]]
 #+end_org """
-class usgCursParsGetK2(icm.Cmnd):
+class usgCursParsGetK2(cs.Cmnd):
     cmndParamsMandatory = [ ]
     cmndParamsOptional = [ 'configBaseDir', ]
     cmndArgsLen = {'Min': 0, 'Max': 9999,}
 
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
     def cmnd(self,
-        interactive=False,        # Can also be called non-interactively
-        configBaseDir=None,         # or Cmnd-Input
-        argsList=[],         # or Args-Input
-    ) -> icm.OpOutcome:
-        cmndOutcome = self.getOpOutcome()
-        if interactive:
-            if not self.cmndLineValidate(outcome=cmndOutcome):
-                return cmndOutcome
-            effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
-        else:
-            effectiveArgsList = argsList
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             configBaseDir: typing.Optional[str]=None,  # Cs Optional Param
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+    ) -> b.op.Outcome:
 
         callParamsDict = {'configBaseDir': configBaseDir, }
-        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
-            return cmndOutcome
-        configBaseDir = callParamsDict['configBaseDir']
-
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return b_io.eh.badOutcome(cmndOutcome)
         cmndArgsSpecDict = self.cmndArgsSpec()
-        if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
-            return cmndOutcome
 ####+END:
         self.cmndDocStr(f""" #+begin_org
 ** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  it reads from ../usgCurs/fp.
@@ -541,7 +534,7 @@ class usgCursParsGetK2(icm.Cmnd):
         if not configBaseDir:
             configBaseDir = configUsgCursFpBaseDir_obtain(None)
 
-        cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, effectiveArgsList)
+        cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, argsList)
 
         # FP_readTreeAtBaseDir_CmndOutput(
         #     interactive=False,
@@ -549,7 +542,7 @@ class usgCursParsGetK2(icm.Cmnd):
         #     cmndOutcome=cmndOutcome,
         # )
 
-        bpf.fp.readTreeAtBaseDir_wOp(configBaseDir, cmndOutcome=cmndOutcome)
+        b.fp.readTreeAtBaseDir_wOp(configBaseDir, cmndOutcome=cmndOutcome)
 
         results = cmndOutcome.results
 
@@ -566,37 +559,27 @@ class usgCursParsGetK2(icm.Cmnd):
 
 
 
-####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "usgCursParsGet" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin "0" :argsMax "9999" :asFunc "" :interactiveP ""
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "usgCursParsGet" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin 0 :argsMax 9999 :pyInv ""
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc    [[elisp:(outline-show-subtree+toggle)][||]] /usgCursParsGet/ parsMand= parsOpt=configBaseDir argsMin=0 argsMax=9999 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<usgCursParsGet>>  =verify= parsOpt=configBaseDir argsMax=9999 ro=cli   [[elisp:(org-cycle)][| ]]
 #+end_org """
-class usgCursParsGet(icm.Cmnd):
+class usgCursParsGet(cs.Cmnd):
     cmndParamsMandatory = [ ]
     cmndParamsOptional = [ 'configBaseDir', ]
     cmndArgsLen = {'Min': 0, 'Max': 9999,}
 
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
     def cmnd(self,
-        interactive=False,        # Can also be called non-interactively
-        configBaseDir=None,         # or Cmnd-Input
-        argsList=[],         # or Args-Input
-    ) -> icm.OpOutcome:
-        cmndOutcome = self.getOpOutcome()
-        if interactive:
-            if not self.cmndLineValidate(outcome=cmndOutcome):
-                return cmndOutcome
-            effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
-        else:
-            effectiveArgsList = argsList
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             configBaseDir: typing.Optional[str]=None,  # Cs Optional Param
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+    ) -> b.op.Outcome:
 
         callParamsDict = {'configBaseDir': configBaseDir, }
-        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
-            return cmndOutcome
-        configBaseDir = callParamsDict['configBaseDir']
-
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return b_io.eh.badOutcome(cmndOutcome)
         cmndArgsSpecDict = self.cmndArgsSpec()
-        if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
-            return cmndOutcome
 ####+END:
         self.cmndDocStr(f""" #+begin_org
 ** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  it reads from ../usgCurs/fp.
@@ -605,29 +588,28 @@ class usgCursParsGet(icm.Cmnd):
         if not configBaseDir:
             configBaseDir = configUsgCursFpBaseDir_obtain(None)
 
-        cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, effectiveArgsList)
+        cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, argsList)
 
         curParsGetAsDictValue_wOp(cmndArgs, cmndOutcome)
-
         results = cmndOutcome.results
 
-        if interactive:
+        if rtInv.outs:
             for eachKey in results:
                 print(f"{eachKey}: {results[eachKey]}")
 
         return cmndOutcome
 
-####+BEGIN: bx:icm:python:method :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
-    """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-anyOrNone :: /cmndArgsSpec/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
-#+end_org """
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def cmndArgsSpec(self):
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
 ####+END:
         """
 ***** Cmnd Args Specification
 """
-        cmndArgsSpecDict = icm.CmndArgsSpecDict()
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
         cmndArgsSpecDict.argsDictAdd(
             argPosition="0&-1",
             argName="cmndArgs",
@@ -641,41 +623,29 @@ class usgCursParsGet(icm.Cmnd):
 
 
 
-####+BEGIN: bx:icm:python:cmnd:classHead :cmndName "usgCursParsSet" :comment "" :parsMand "" :parsOpt "configBaseDir bxoId sr" :argsMin "0" :argsMax "1000" :asFunc "" :interactiveP ""
+####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "usgCursParsSet" :comment "" :parsMand "" :parsOpt "configBaseDir bxoId sr" :argsMin 0 :argsMax 1000 :pyInv ""
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc    [[elisp:(outline-show-subtree+toggle)][||]] /usgCursParsSet/ parsMand= parsOpt=configBaseDir bxoId sr argsMin=0 argsMax=1000 asFunc= interactive=  [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<usgCursParsSet>>  =verify= parsOpt=configBaseDir bxoId sr argsMax=1000 ro=cli   [[elisp:(org-cycle)][| ]]
 #+end_org """
-class usgCursParsSet(icm.Cmnd):
+class usgCursParsSet(cs.Cmnd):
     cmndParamsMandatory = [ ]
     cmndParamsOptional = [ 'configBaseDir', 'bxoId', 'sr', ]
     cmndArgsLen = {'Min': 0, 'Max': 1000,}
 
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
     def cmnd(self,
-        interactive=False,        # Can also be called non-interactively
-        configBaseDir=None,         # or Cmnd-Input
-        bxoId=None,         # or Cmnd-Input
-        sr=None,         # or Cmnd-Input
-        argsList=[],         # or Args-Input
-    ) -> icm.OpOutcome:
-        cmndOutcome = self.getOpOutcome()
-        if interactive:
-            if not self.cmndLineValidate(outcome=cmndOutcome):
-                return cmndOutcome
-            effectiveArgsList = G.icmRunArgsGet().cmndArgs  # type: ignore
-        else:
-            effectiveArgsList = argsList
+             rtInv: cs.RtInvoker,
+             cmndOutcome: b.op.Outcome,
+             configBaseDir: typing.Optional[str]=None,  # Cs Optional Param
+             bxoId: typing.Optional[str]=None,  # Cs Optional Param
+             sr: typing.Optional[str]=None,  # Cs Optional Param
+             argsList: typing.Optional[list[str]]=None,  # CsArgs
+    ) -> b.op.Outcome:
 
         callParamsDict = {'configBaseDir': configBaseDir, 'bxoId': bxoId, 'sr': sr, }
-        if not icm.cmndCallParamsValidate(callParamsDict, interactive, outcome=cmndOutcome):
-            return cmndOutcome
-        configBaseDir = callParamsDict['configBaseDir']
-        bxoId = callParamsDict['bxoId']
-        sr = callParamsDict['sr']
-
+        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            return b_io.eh.badOutcome(cmndOutcome)
         cmndArgsSpecDict = self.cmndArgsSpec()
-        if not self.cmndArgsValidate(effectiveArgsList, cmndArgsSpecDict, outcome=cmndOutcome):
-            return cmndOutcome
 ####+END:
         self.cmndDocStr(f""" #+begin_org
 ** [[elisp:(org-cycle)][| *CmndDesc:* | ]] Args are in the form of a list of varName=varValue. Well known pars can also be set.
@@ -685,7 +655,7 @@ class usgCursParsSet(icm.Cmnd):
         if not configBaseDir:
             configBaseDir = configBaseDir_obtain()
 
-        cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, effectiveArgsList)
+        cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, argsList)
 
         parNameFullPath = ""
 
@@ -700,7 +670,7 @@ class usgCursParsSet(icm.Cmnd):
                 if not os.path.isdir(valuePath):
                     raise
 
-            bpf.fp.FILE_ParamWriteToPath(
+            b.fp.b.fp.FileParamWriteToPath(
                 parNameFullPath=fpPath,
                 parValue=valuePath,
             )
@@ -713,7 +683,7 @@ class usgCursParsSet(icm.Cmnd):
                     configUsgCursFpBaseDir_obtain(configBaseDir=configBaseDir),
                     varNameValue[0],
             )
-            bpf.fp.FILE_ParamWriteToPath(
+            b.fp.b.fp.FileParamWriteToPath(
                 parNameFullPath=parNameFullPath,
 
                 parValue=varNameValue[1],
@@ -721,7 +691,7 @@ class usgCursParsSet(icm.Cmnd):
 
 
         if bxoId:
-             parNameFullPath = bpf.fp.FILE_ParamWriteToPath(
+             parNameFullPath = b.fp.b.fp.FileParamWriteToPath(
                 parNameFullPath=os.path.join(
                     configUsgCursFpBaseDir_obtain(configBaseDir=configBaseDir),
                     "bxoId",
@@ -730,35 +700,35 @@ class usgCursParsSet(icm.Cmnd):
             )
 
         if sr:
-             parNameFullPath = bpf.fp.FILE_ParamWriteToPath(
+             parNameFullPath = b.fp.b.fp.FileParamWriteToPath(
                 parNameFullPath=os.path.join(configUsgCursFpBaseDir_obtain(configBaseDir=configBaseDir),
                              "sr",
                 ),
                 parValue=sr,
             )
 
-        if interactive:
-            parValue = bpf.fp.FILE_ParamValueReadFromPath(parNameFullPath)
-            icm.ANN_here("usgCursParsSet: {parValue} at {parNameFullPath}".
+        if rtInv.outs:
+            parValue = b.fp.FileParamValueReadFromPath(parNameFullPath)
+            b_io.ann.here("usgCursParsSet: {parValue} at {parNameFullPath}".
                          format(parValue=parValue, parNameFullPath=parNameFullPath))
 
 
         return cmndOutcome.set(
-            opError=icm.OpError.Success,
+            opError=b.OpError.Success,
             opResults=True,
         )
 
-####+BEGIN: bx:icm:python:method :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList ""
-    """
-**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Method-anyOrNone :: /cmndArgsSpec/ retType=bool argsList=nil deco=default  [[elisp:(org-cycle)][| ]]
-#+end_org """
-    @icm.subjectToTracking(fnLoc=True, fnEntry=True, fnExit=True)
-    def cmndArgsSpec(self):
+####+BEGIN: b:py3:cs:method/args :methodName "cmndArgsSpec" :methodType "anyOrNone" :retType "bool" :deco "default" :argsList "self"
+    """ #+begin_org
+**  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  Mtd-T-anyOrNone [[elisp:(outline-show-subtree+toggle)][||]] /cmndArgsSpec/ deco=default  deco=default  [[elisp:(org-cycle)][| ]]
+    #+end_org """
+    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
+    def cmndArgsSpec(self, ):
 ####+END:
         """
 ***** Cmnd Args Specification
 """
-        cmndArgsSpecDict = icm.CmndArgsSpecDict()
+        cmndArgsSpecDict = cs.CmndArgsSpecDict()
         cmndArgsSpecDict.argsDictAdd(
             argPosition="0&-1",
             argName="cmndArgs",
