@@ -281,7 +281,6 @@ def examples_usgCursParsFull(
     cps = collections.OrderedDict() ;
     cs.examples.cmndInsert(cmndName, cps, cmndArgs, icmWrapper="echo", verbosity='little')
 
-
     cs.examples.menuChapter(' =FP Values=  *usgCurs Get Parameters*')
 
     cmndName = "usgCursParsGet" ; cmndArgs = "" ;
@@ -300,25 +299,31 @@ def examples_usgCursParsFull(
 
     cs.examples.menuChapter(' =FP Values=  *UsgCurs ParsSet -- Set Parameters Explicitly*')
 
-    cmndName = "usgCursParsSet" ; cmndArgs = "" ;
-    cps = collections.OrderedDict() ;  cps['bxoId'] = "mcm"
-    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
-
-    cmndName = "usgCursParsSet" ; cmndArgs = "" ;
-    cps = collections.OrderedDict() ;  cps['bxoId'] = "ea-59043"
-    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
-
-    cmndName = "usgCursParsSet" ; cmndArgs = "" ;
-    cps = collections.OrderedDict() ;  cps['sr'] = "marme/dsnProc"
-    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
-
-    cmndName = "usgCursParsSet" ; cmndArgs = "" ;
-    cps = collections.OrderedDict() ;  cps['sr'] = "apache2/plone3"
-    cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
+    cmndOutcome = b.op.Outcome()
+    curParsGetAsDictValue_wOp("", cmndOutcome)
+    results = cmndOutcome.results
+    for eachKey in results:
+        cs.examples.execInsert(execLine=f"bx-currents.cs -v 20 -i usgCursParsSet {eachKey}={results[eachKey]}")
 
     # cmndName = "usgCursParsSet" ; cmndArgs = "" ;
-    # cps = collections.OrderedDict() ;  cps['configBaseDir'] = configBaseDir ; cps['platformControlBaseDir'] = "${HOME}/bisosControl"
+    # cps = collections.OrderedDict() ;  cps['bpoId'] = "BPOID"
     # cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
+
+    # cmndName = "usgCursParsSet" ; cmndArgs = "" ;
+    # cps = collections.OrderedDict() ;  cps['bxoId'] = "ea-59043"
+    # cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
+
+    # cmndName = "usgCursParsSet" ; cmndArgs = "" ;
+    # cps = collections.OrderedDict() ;  cps['sr'] = "marme/dsnProc"
+    # cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
+
+    # cmndName = "usgCursParsSet" ; cmndArgs = "" ;
+    # cps = collections.OrderedDict() ;  cps['sr'] = "apache2/plone3"
+    # cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
+
+    # # cmndName = "usgCursParsSet" ; cmndArgs = "" ;
+    # # cps = collections.OrderedDict() ;  cps['configBaseDir'] = configBaseDir ; cps['platformControlBaseDir'] = "${HOME}/bisosControl"
+    # # cs.examples.cmndInsert(cmndName, cps, cmndArgs, verbosity='little')
 
     cmndName = "usgCursParsSet" ; cmndArgs = "anyName=anyValue" ;
     cps = collections.OrderedDict() ;
@@ -433,6 +438,26 @@ class usgCursParsDelete(cs.Cmnd):
         return cmndArgsSpecDict
 
 
+####+BEGIN: b:py3:cs:func/typing :funcName "curParsGetAsDictValue" :funcType "WOp" :retType "extTyped" :deco ""
+""" #+begin_org
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-WOp    [[elisp:(outline-show-subtree+toggle)][||]] /curParsGetAsDictValue/   [[elisp:(org-cycle)][| ]]
+#+end_org """
+def curParsGetAsDictValue(
+####+END:
+        parNamesList: list,
+) -> typing.Dict[str, typing.Any]:
+    """ #+begin_org
+** [[elisp:(org-cycle)][| *DocStr | ] A function returning a dictionary of values.
+    if not ~parNamesList~, get all the values.
+    #+end_org """
+
+    configBaseDir = configUsgCursFpBaseDir_obtain(None)
+
+    return (
+        b.fp.parsGetAsDictValue(parNamesList, configBaseDir,)
+    )
+
+
 ####+BEGIN: b:py3:cs:func/typing :funcName "curParsGetAsDictValue_wOp" :funcType "WOp" :retType "extTyped" :deco "" :argsList ""
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-WOp    [[elisp:(outline-show-subtree+toggle)][||]] /curParsGetAsDictValue_wOp/   [[elisp:(org-cycle)][| ]]
@@ -445,20 +470,20 @@ def curParsGetAsDictValue_wOp(
     """ #+begin_org
 ** [[elisp:(org-cycle)][| *DocStr | ] A Wrapped Operation with results being a dictionary of values.
     if not ~parNamesList~, get all the values.
-*** TODO --- NOTYET This needs to be moved to
     #+end_org """
 
     configBaseDir = configUsgCursFpBaseDir_obtain(None)
 
     return (
-        FP_parsGetAsDictValue_wOp(parNamesList, configBaseDir, outcome)
+        #FP_parsGetAsDictValue_wOp(parNamesList, configBaseDir, outcome)
+        b.fp.parsGetAsDictValue_wOp(parNamesList, configBaseDir, outcome)
     )
 
-####+BEGIN: b:py3:cs:func/typing :funcName "FP_parsGetAsDictValue_wOp" :funcType "wOp" :retType "OpOutcome" :deco "" :argsList ""
+####+BEGIN: b:py3:cs:func/typing :funcName "FP_parsGetAsDictValue_wOp_Obsoleted" :funcType "wOp" :retType "OpOutcome" :deco "" :argsList ""
 """ #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-wOp    [[elisp:(outline-show-subtree+toggle)][||]] /FP_parsGetAsDictValue_wOp/   [[elisp:(org-cycle)][| ]]
+*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  F-T-wOp    [[elisp:(outline-show-subtree+toggle)][||]] /FP_parsGetAsDictValue_wOp_Obsoleted/   [[elisp:(org-cycle)][| ]]
 #+end_org """
-def FP_parsGetAsDictValue_wOp(
+def FP_parsGetAsDictValue_wOp_Obsoleted(
 ####+END:
         parNamesList: list,
         configBaseDir,
@@ -471,7 +496,10 @@ def FP_parsGetAsDictValue_wOp(
     #+end_org """
 
 
+
     return b.fp.parsGetAsDictValue_wOp(parNamesList, configBaseDir, outcome=outcome)
+
+    print(f"NOTREACHED {configBaseDir}")
 
     if not outcome:
         outcome = b.op.Outcome()
@@ -502,60 +530,6 @@ def FP_parsGetAsDictValue_wOp(
         opError=b.OpError.Success,
         opResults=opResults,
     )
-
-
-
-####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "usgCursParsGetK2" :comment "" :parsMand "" :parsOpt "configBaseDir" :argsMin 0 :argsMax 9999 :pyInv ""
-""" #+begin_org
-*  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<usgCursParsGetK2>>  =verify= parsOpt=configBaseDir argsMax=9999 ro=cli   [[elisp:(org-cycle)][| ]]
-#+end_org """
-class usgCursParsGetK2(cs.Cmnd):
-    cmndParamsMandatory = [ ]
-    cmndParamsOptional = [ 'configBaseDir', ]
-    cmndArgsLen = {'Min': 0, 'Max': 9999,}
-
-    @cs.track(fnLoc=True, fnEntry=True, fnExit=True)
-    def cmnd(self,
-             rtInv: cs.RtInvoker,
-             cmndOutcome: b.op.Outcome,
-             configBaseDir: typing.Optional[str]=None,  # Cs Optional Param
-             argsList: typing.Optional[list[str]]=None,  # CsArgs
-    ) -> b.op.Outcome:
-
-        callParamsDict = {'configBaseDir': configBaseDir, }
-        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
-            return b_io.eh.badOutcome(cmndOutcome)
-        cmndArgsSpecDict = self.cmndArgsSpec()
-####+END:
-        self.cmndDocStr(f""" #+begin_org
-** [[elisp:(org-cycle)][| *CmndDesc:* | ]]  it reads from ../usgCurs/fp.
-        #+end_org """)
-
-        if not configBaseDir:
-            configBaseDir = configUsgCursFpBaseDir_obtain(None)
-
-        cmndArgs = self.cmndArgsGet("0&-1", cmndArgsSpecDict, argsList)
-
-        # FP_readTreeAtBaseDir_CmndOutput(
-        #     interactive=False,
-        #     fpBaseDir=configBaseDir,
-        #     cmndOutcome=cmndOutcome,
-        # )
-
-        b.fp.readTreeAtBaseDir_wOp(configBaseDir, cmndOutcome=cmndOutcome)
-
-        results = cmndOutcome.results
-
-        if len(cmndArgs) == 0:
-            for eachFpName in results:
-                eachFpValue = results[eachFpName].parValueGet()
-                print(f"{eachFpName} {eachFpValue}")
-        else:
-            for each in cmndArgs:
-                eachFpValue = results[each].parValueGet()
-                print(f"{each} {eachFpValue}")
-
-        return cmndOutcome
 
 
 
@@ -594,6 +568,8 @@ class usgCursParsGet(cs.Cmnd):
         results = cmndOutcome.results
 
         if rtInv.outs:
+            configBaseDir = configUsgCursFpBaseDir_obtain(None)
+            print(f"Obtained From: configBaseDir={configBaseDir}")
             for eachKey in results:
                 print(f"{eachKey}: {results[eachKey]}")
 
@@ -623,7 +599,7 @@ class usgCursParsGet(cs.Cmnd):
 
 
 
-####+BEGIN: b:py3:cs:cmnd/classHead :cmndName "usgCursParsSet" :comment "" :parsMand "" :parsOpt "configBaseDir bxoId sr" :argsMin 0 :argsMax 1000 :pyInv ""
+####+BEGIN: b:py3:cs:cmnd/classHeadNOT :cmndName "usgCursParsSet" :comment "" :parsMand "" :parsOpt "configBaseDir bxoId sr" :argsMin 0 :argsMax 1000 :pyInv ""
 """ #+begin_org
 *  _[[elisp:(blee:menu-sel:outline:popupMenu)][±]]_ _[[elisp:(blee:menu-sel:navigation:popupMenu)][Ξ]]_ [[elisp:(outline-show-branches+toggle)][|=]] [[elisp:(bx:orgm:indirectBufOther)][|>]] *[[elisp:(blee:ppmm:org-mode-toggle)][|N]]*  CmndSvc-   [[elisp:(outline-show-subtree+toggle)][||]] <<usgCursParsSet>>  =verify= parsOpt=configBaseDir bxoId sr argsMax=1000 ro=cli   [[elisp:(org-cycle)][| ]]
 #+end_org """
@@ -642,9 +618,9 @@ class usgCursParsSet(cs.Cmnd):
              argsList: typing.Optional[list[str]]=None,  # CsArgs
     ) -> b.op.Outcome:
 
-        callParamsDict = {'configBaseDir': configBaseDir, 'bxoId': bxoId, 'sr': sr, }
-        if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
-            return b_io.eh.badOutcome(cmndOutcome)
+        #callParamsDict = {'configBaseDir': configBaseDir, 'bxoId': bxoId, 'sr': sr, }
+        #if self.invocationValidate(rtInv, cmndOutcome, callParamsDict, argsList).isProblematic():
+            #return b_io.eh.badOutcome(cmndOutcome)
         cmndArgsSpecDict = self.cmndArgsSpec()
 ####+END:
         self.cmndDocStr(f""" #+begin_org
@@ -685,7 +661,6 @@ class usgCursParsSet(cs.Cmnd):
             )
             b.fp.b.fp.FileParamWriteToPath(
                 parNameFullPath=parNameFullPath,
-
                 parValue=varNameValue[1],
             )
 
