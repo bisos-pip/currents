@@ -92,6 +92,7 @@ import collections
 import shutil
 
 import sys
+import pathlib
 
 ####+BEGIN: blee:bxPanel:foldingSection :outLevel 1 :title "Obtain Package Bases"  :extraInfo ""
 """ #+begin_org
@@ -117,8 +118,12 @@ def configBaseDir_obtain(
         f"""usgBpos.sh -i usgBpos_usageEnvs_fullUse_bxoPath""")
 
     if outcome.isProblematic():
-        b_io.eh.badOutcome(outcome)
-        return ""
+        outcome =  b.subProc.WOpW(invedBy=None, log=0).bash(
+            f"""usgBpos.sh -i usgBposUsageEnvs_bisosDev_bxoPath""")
+        if outcome.isProblematic():
+                b_io.ann("Both Failed: usgBpos.sh -i {usgBposUsageEnvs_bisosDev_bxoPath,usgBposUsageEnvs_bisosDev_bxoPath}")
+                b_io.eh.badOutcome(outcome)
+                return ""
 
     retVal = outcome.stdout.rstrip('\n')
 
@@ -473,6 +478,9 @@ def curParsGetAsDictValue_wOp(
     #+end_org """
 
     configBaseDir = configUsgCursFpBaseDir_obtain(None)
+
+    if not pathlib.Path(configBaseDir).exists():
+        return None
 
     return (
         #FP_parsGetAsDictValue_wOp(parNamesList, configBaseDir, outcome)
