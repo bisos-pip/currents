@@ -121,7 +121,8 @@ def configBaseDir_obtain(
         outcome =  b.subProc.WOpW(invedBy=None, log=0).bash(
             f"""usgBpos.sh -i usgBposUsageEnvs_bisosDev_bxoPath""")
         if outcome.isProblematic():
-                b_io.ann("Both Failed: usgBpos.sh -i {usgBposUsageEnvs_bisosDev_bxoPath,usgBposUsageEnvs_bisosDev_bxoPath}")
+                #b_io.ann("Both Failed: usgBpos.sh -i {usgBposUsageEnvs_bisosDev_bxoPath,usgBposUsageEnvs_bisosDev_bxoPath}")
+                b_io.write("Both Failed: usgBpos.sh -i {usgBposUsageEnvs_bisosDev_bxoPath}")
                 b_io.eh.badOutcome(outcome)
                 return ""
 
@@ -479,7 +480,11 @@ def curParsGetAsDictValue_wOp(
 
     configBaseDir = configUsgCursFpBaseDir_obtain(None)
 
-    if not pathlib.Path(configBaseDir).exists():
+    try:
+        if not pathlib.Path(configBaseDir).exists():
+            return None
+    except:
+        print("NOTYET -- exception")
         return None
 
     return (

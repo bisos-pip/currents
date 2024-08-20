@@ -42,7 +42,7 @@ def longDescription():
 # :installed "0.22" --- Forces a specific version
 ####+BEGIN: b:py3:pypi/nextVersion :increment 0.01
 
-# ./pypiUploadVer does not exist -- pypiNextVer=0.62 -- installedVersion=0.6
+# ./pypiUploadVer does not exist -- pypiNextVer=0.61 -- installedVersion=0.6
 def pkgVersion():
         return '0.6'  # Version Nu Of Installed Pkg
 
