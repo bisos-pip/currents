@@ -119,7 +119,7 @@ def configBaseDir_obtain(
 
     if outcome.isProblematic():
         outcome =  b.subProc.WOpW(invedBy=None, log=0).bash(
-            f"""usgBpos.sh -i usgBposUsageEnvs_bisosDev_bxoPath""")
+            f"""/bisos/core/bsip/bin/usgBpos.sh -i usgBposUsageEnvs_bisosDev_bxoPath""")
         if outcome.isProblematic():
                 #b_io.ann("Both Failed: usgBpos.sh -i {usgBposUsageEnvs_bisosDev_bxoPath,usgBposUsageEnvs_bisosDev_bxoPath}")
                 b_io.write("Both Failed: usgBpos.sh -i {usgBposUsageEnvs_bisosDev_bxoPath}")
