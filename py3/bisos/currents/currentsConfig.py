@@ -482,7 +482,7 @@ def curParsGetAsDictValue_wOp(
 
     try:
         if not pathlib.Path(configBaseDir).exists():
-            print(f"Missing {configBaseDir}")
+            b_io.stderr(f"ALERT: Missing {configBaseDir}")
             outcome.results = {}
             return outcome
             #return None
